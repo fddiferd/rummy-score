@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { useGameContext } from '../context/GameContext';
+import { Plus, Play } from 'lucide-react';
 
 const Header: React.FC = () => {
   const { gameState, endGame } = useGameContext();
@@ -21,19 +22,34 @@ const Header: React.FC = () => {
   };
   
   return (
-    <header className="bg-indigo-700 text-white py-4 px-6 shadow-md">
-      <div className="container mx-auto flex justify-between items-center">
-        <h1 className="text-2xl font-bold">Rummy 500 Scorekeeper</h1>
-        
-        <button
-          onClick={handleNewGame}
-          className="bg-white text-indigo-700 px-4 py-2 rounded hover:bg-indigo-100"
-        >
-          {currentGame ? 'New Game' : 'Start Game'}
-        </button>
+    <header className="bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg">
+      <div className="container mx-auto px-6 py-4">
+        <div className="flex justify-between items-center">
+          <div>
+            <h1 className="text-3xl font-bold">Game Tracker</h1>
+            <p className="text-blue-100 text-sm">Professional Score Tracking</p>
+          </div>
+          
+          <button
+            onClick={handleNewGame}
+            className="bg-white text-blue-600 px-6 py-2 rounded-lg transition-all duration-200 font-semibold flex items-center space-x-2 shadow-lg hover:shadow-xl hover:bg-blue-50"
+          >
+            {currentGame ? (
+              <>
+                <Plus size={18} />
+                <span>New Game</span>
+              </>
+            ) : (
+              <>
+                <Play size={18} />
+                <span>Start Game</span>
+              </>
+            )}
+          </button>
+        </div>
       </div>
     </header>
   );
 };
 
-export default Header; 
+export default Header;

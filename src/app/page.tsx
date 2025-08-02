@@ -12,33 +12,48 @@ export default function Home() {
   const { currentGame } = gameState;
   
   return (
-    <main>
+    <main className="min-h-screen">
       <Header />
       
-      <div className="container mx-auto py-8 px-4">
+      <div className="container mx-auto py-6 px-4 max-w-7xl min-h-[calc(100vh-200px)]">
         {currentGame ? (
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="lg:col-span-2">
-              <GameScoreboard />
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 h-full">
+            <div className="lg:col-span-8 xl:col-span-9">
+              <div className="animate-fade-in h-full">
+                <GameScoreboard />
+              </div>
             </div>
-            <div>
-              <GameList />
+            <div className="lg:col-span-4 xl:col-span-3">
+              <div className="animate-slide-in h-full">
+                <GameList />
+              </div>
             </div>
           </div>
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="lg:col-span-2">
-              <NewGameForm />
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 h-full">
+            <div className="lg:col-span-8 xl:col-span-9 flex items-center justify-center">
+              <div className="animate-fade-in w-full max-w-2xl">
+                <NewGameForm />
+              </div>
             </div>
-            <div>
-              <GameList />
+            <div className="lg:col-span-4 xl:col-span-3">
+              <div className="animate-slide-in h-full">
+                <GameList />
+              </div>
             </div>
           </div>
         )}
       </div>
       
-      <footer className="bg-gray-100 py-4 text-center text-black mt-8">
-        <p>Rummy 500 Scorekeeper &copy; {new Date().getFullYear()}</p>
+      <footer className="bg-white border-t border-gray-200 py-8 text-center mt-16">
+        <div className="container mx-auto px-4">
+          <p className="text-gray-600 text-sm">
+            Game Tracker &copy; {new Date().getFullYear()}
+          </p>
+          <p className="text-gray-500 text-xs mt-1">
+            Professional score tracking for game enthusiasts
+          </p>
+        </div>
       </footer>
     </main>
   );

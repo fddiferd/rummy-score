@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { useGameContext } from '../context/GameContext';
+import { Users, Target, Plus, X } from 'lucide-react';
 
 const NewGameForm: React.FC = () => {
   const { startNewGame } = useGameContext();
@@ -17,6 +18,7 @@ const NewGameForm: React.FC = () => {
   const removePlayer = (index: number) => {
     if (playerNames.length <= 2) {
       setError('You need at least 2 players');
+      setTimeout(() => setError(''), 3000);
       return;
     }
     setPlayerNames(playerNames.filter((_, i) => i !== index));
@@ -53,72 +55,88 @@ const NewGameForm: React.FC = () => {
   };
 
   return (
-    <div className="bg-white shadow-md rounded-lg p-6 max-w-md mx-auto">
-      <h2 className="text-2xl font-bold mb-4 text-indigo-700">Start New Game</h2>
+    <div className="bg-white shadow-lg rounded-xl p-8 max-w-lg mx-auto border border-gray-100">
+      <div className="text-center mb-8">
+        <h2 className="text-3xl font-bold text-gray-800 mb-2">Start New Game</h2>
+        <p className="text-gray-600">Set up your game and start tracking scores</p>
+      </div>
       
       {error && (
-        <div className="mb-4 p-2 bg-red-100 text-red-700 rounded">
+        <div className="mb-6 p-4 bg-red-50 border border-red-200 text-red-700 rounded-lg">
           {error}
         </div>
       )}
       
-      <form onSubmit={handleSubmit}>
-        <div className="mb-4">
-          <label className="block text-black mb-2">Game Name</label>
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <div>
+          <label className="block text-gray-700 font-medium mb-2">Game Name</label>
           <input
             type="text"
             value={gameName}
             onChange={(e) => setGameName(e.target.value)}
-            className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-indigo-500 text-black placeholder-black"
-            placeholder="e.g., Game Night July 2023"
+            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-800 placeholder-gray-500"
+            placeholder="e.g., Game Night - July 2024"
           />
         </div>
         
-        <div className="mb-4">
-          <label className="block text-black mb-2">Target Score</label>
-          <input
-            type="number"
+        <div>
+          <label className="block text-gray-700 font-medium mb-2 flex items-center space-x-2">
+            <Target size={18} />
+            <span>Target Score</span>
+          </label>
+          <select
             value={targetScore}
             onChange={(e) => setTargetScore(Number(e.target.value))}
-            className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-indigo-500 text-black placeholder-black"
-            min="100"
-            step="100"
-          />
+            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-800"
+          >
+            <option value={300}>300 points</option>
+            <option value={500}>500 points</option>
+            <option value={750}>750 points</option>
+            <option value={1000}>1000 points</option>
+          </select>
         </div>
         
-        <div className="mb-4">
-          <label className="block text-black mb-2">Players</label>
-          {playerNames.map((name, index) => (
-            <div key={index} className="flex mb-2">
-              <input
-                type="text"
-                value={name}
-                onChange={(e) => updatePlayerName(index, e.target.value)}
-                className="flex-grow p-2 border rounded-l focus:outline-none focus:ring-2 focus:ring-indigo-500 text-black placeholder-black"
-                placeholder={`Player ${index + 1}`}
-              />
-              <button
-                type="button"
-                onClick={() => removePlayer(index)}
-                className="bg-red-500 text-white px-3 rounded-r hover:bg-red-600"
-              >
-                ✕
-              </button>
-            </div>
-          ))}
+        <div>
+          <label className="block text-gray-700 font-medium mb-3 flex items-center space-x-2">
+            <Users size={18} />
+            <span>Players</span>
+          </label>
+          <div className="space-y-3">
+            {playerNames.map((name, index) => (
+              <div key={index} className="flex space-x-2">
+                <input
+                  type="text"
+                  value={name}
+                  onChange={(e) => updatePlayerName(index, e.target.value)}
+                  className="flex-grow p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-800 placeholder-gray-500"
+                  placeholder={`Player ${index + 1} name`}
+                />
+                {playerNames.length > 2 && (
+                  <button
+                    type="button"
+                    onClick={() => removePlayer(index)}
+                    className="p-3 bg-red-100 text-red-600 rounded-lg hover:bg-red-200 transition-colors"
+                  >
+                    <X size={18} />
+                  </button>
+                )}
+              </div>
+            ))}
+          </div>
           
           <button
             type="button"
             onClick={addPlayer}
-            className="mt-2 bg-indigo-100 text-indigo-700 px-4 py-2 rounded w-full hover:bg-indigo-200"
+            className="mt-3 w-full bg-gray-100 text-gray-700 px-4 py-3 rounded-lg hover:bg-gray-200 transition-colors font-medium flex items-center justify-center space-x-2"
           >
-            + Add Player
+            <Plus size={18} />
+            <span>Add Player</span>
           </button>
         </div>
         
         <button
           type="submit"
-          className="w-full bg-indigo-600 text-white py-2 px-4 rounded hover:bg-indigo-700"
+          className="w-full bg-blue-600 text-white py-4 px-6 rounded-lg hover:bg-blue-700 transition-colors font-semibold text-lg"
         >
           Start Game
         </button>
@@ -127,4 +145,4 @@ const NewGameForm: React.FC = () => {
   );
 };
 
-export default NewGameForm; 
+export default NewGameForm;
