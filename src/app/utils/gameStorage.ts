@@ -1,6 +1,6 @@
 import { Game, GameState } from './types';
 
-const STORAGE_KEY = 'rummy500_game_data';
+const STORAGE_KEY = 'countmyscore_game_data';
 
 export const getInitialGameState = (): GameState => {
   if (typeof window === 'undefined') {

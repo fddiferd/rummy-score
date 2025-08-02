@@ -17,6 +17,7 @@ interface GameContextType {
   editRound: (roundId: string, scores: Record<string, number>) => void;
   endGame: () => void;
   selectGame: (gameId: string) => void;
+  deleteGame: (gameId: string) => void;
   getPlayerTotals: (playerId: string) => number;
 }
 
@@ -113,6 +114,19 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }));
   };
   
+  const deleteGame = (gameId: string) => {
+    setGameState(prev => {
+      const updatedGames = prev.games.filter(g => g.id !== gameId);
+      const updatedCurrentGame = prev.currentGame?.id === gameId ? null : prev.currentGame;
+      
+      return {
+        ...prev,
+        games: updatedGames,
+        currentGame: updatedCurrentGame
+      };
+    });
+  };
+
   const getPlayerTotals = (playerId: string): number => {
     if (!gameState.currentGame) return 0;
     
@@ -129,6 +143,7 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       editRound,
       endGame,
       selectGame,
+      deleteGame,
       getPlayerTotals
     }}>
       {children}

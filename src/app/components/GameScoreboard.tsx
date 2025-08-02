@@ -82,7 +82,7 @@ const GameScoreboard: React.FC = () => {
   
   return (
     <>
-      <div className="bg-white shadow-lg rounded-xl p-6 mb-6 border border-gray-100">
+      <div className="bg-white shadow-lg lg:rounded-xl p-4 md:p-6 mb-6 border-0 lg:border border-gray-100">
         <div className="flex justify-between items-center mb-6">
           <div>
             <h2 className="text-3xl font-bold text-gray-800">{currentGame.name}</h2>
@@ -97,7 +97,14 @@ const GameScoreboard: React.FC = () => {
           </button>
         </div>
         
-        <h3 className="text-xl font-semibold mb-4 text-gray-800">Current Standings</h3>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-xl font-semibold text-gray-800">Current Standings</h3>
+          {!currentGame.isComplete && (
+            <span className="bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-full">
+              In Progress
+            </span>
+          )}
+        </div>
         <div className="space-y-3 mb-8">
           {sortedPlayers.map((player, index) => (
             <div key={player.id} className={`p-4 rounded-lg border transition-colors ${getRankStyling(index)}`}>
@@ -154,19 +161,19 @@ const GameScoreboard: React.FC = () => {
               <tbody>
                 {currentGame.rounds.map((round, roundIndex) => (
                   <tr key={round.id} className="border-t border-gray-100 hover:bg-gray-50 transition-colors">
-                    <td className="py-3 px-4 text-gray-800 font-medium">{roundIndex + 1}</td>
+                    <td className="py-3 px-2 md:px-4 text-gray-800 font-medium text-sm">{roundIndex + 1}</td>
                     {currentGame.players.map(player => (
-                      <td key={player.id} className="py-3 px-4 text-right text-gray-800 font-medium">
+                      <td key={player.id} className="py-3 px-2 md:px-4 text-right text-gray-800 font-medium text-sm">
                         {round.scores[player.id] || 0}
                       </td>
                     ))}
-                    <td className="py-3 px-4 text-right">
+                    <td className="py-3 px-2 md:px-4 text-right">
                       <button
                         onClick={() => handleEditRound(round)}
-                        className="bg-blue-50 text-blue-600 px-3 py-1 rounded-lg hover:bg-blue-100 transition-colors inline-flex items-center space-x-1"
+                        className="bg-blue-50 text-blue-600 px-2 py-1 rounded-lg hover:bg-blue-100 transition-colors inline-flex items-center space-x-1 text-xs"
                       >
-                        <Edit2 size={14} />
-                        <span>Edit</span>
+                        <Edit2 size={12} />
+                        <span className="hidden sm:inline">Edit</span>
                       </button>
                     </td>
                   </tr>

@@ -3,15 +3,15 @@
 import React from 'react';
 import { useGameContext } from '../context/GameContext';
 import { getPlayerTotals } from '../utils/gameStorage';
-import { Trophy, Users, Calendar, Clock, Play } from 'lucide-react';
+import { Trophy, Users, Calendar, Clock, Play, X } from 'lucide-react';
 
 const GameList: React.FC = () => {
-  const { gameState, selectGame } = useGameContext();
+  const { gameState, selectGame, deleteGame } = useGameContext();
   const { games } = gameState;
   
   if (games.length === 0) {
     return (
-      <div className="bg-white shadow-lg rounded-xl p-8 text-center border border-gray-100 sticky top-6">
+      <div className="bg-white shadow-lg lg:rounded-xl p-6 md:p-8 text-center border-0 lg:border border-gray-100 lg:sticky lg:top-6">
         <div className="text-gray-300 mb-4">
           <Play size={48} className="mx-auto" />
         </div>
@@ -25,19 +25,27 @@ const GameList: React.FC = () => {
   const sortedGames = [...games].sort((a, b) => 
     new Date(b.date).getTime() - new Date(a.date).getTime()
   );
+
+  const handleDeleteGame = (e: React.MouseEvent, gameId: string, gameName: string) => {
+    e.stopPropagation(); // Prevent triggering selectGame
+    
+    if (window.confirm(`Are you sure you want to delete "${gameName}"? This action cannot be undone.`)) {
+      deleteGame(gameId);
+    }
+  };
   
   return (
-    <div className="bg-white shadow-lg rounded-xl border border-gray-100 sticky top-6 max-h-[calc(100vh-3rem)] overflow-hidden flex flex-col">
-      <div className="p-6 border-b border-gray-100">
-        <h2 className="text-2xl font-bold text-gray-800 flex items-center space-x-3">
+    <div className="bg-white shadow-lg lg:rounded-xl border-0 lg:border border-gray-100 lg:sticky lg:top-6 lg:max-h-[calc(100vh-3rem)] overflow-hidden flex flex-col">
+      <div className="p-4 md:p-6 border-b border-gray-100">
+        <h2 className="text-xl md:text-2xl font-bold text-gray-800 flex items-center space-x-3">
           <div className="p-2 bg-blue-100 rounded-lg">
-            <Calendar size={20} className="text-blue-600" />
+            <Calendar size={18} className="text-blue-600" />
           </div>
           <span>Game History</span>
         </h2>
       </div>
       
-      <div className="flex-1 overflow-y-auto p-6 space-y-4">
+      <div className="flex-1 lg:overflow-y-auto p-4 md:p-6 space-y-4">
         {sortedGames.map(game => {
           const playerTotals = getPlayerTotals(game);
           
@@ -59,14 +67,22 @@ const GameList: React.FC = () => {
           return (
             <div 
               key={game.id} 
-              className="bg-gradient-to-r from-gray-50 to-white border border-gray-200 rounded-xl p-5 hover:border-blue-300 hover:shadow-lg cursor-pointer transition-all duration-300 group hover:from-blue-50 hover:to-white"
+              className="relative bg-gradient-to-r from-gray-50 to-white border border-gray-200 rounded-xl p-4 md:p-5 hover:border-blue-300 hover:shadow-lg cursor-pointer transition-all duration-300 group hover:from-blue-50 hover:to-white"
               onClick={() => selectGame(game.id)}
             >
-              <div className="flex justify-between items-start mb-4">
-                <h3 className="font-bold text-lg text-gray-800 group-hover:text-blue-700 transition-colors line-clamp-2">
+              {/* Delete button - appears on hover */}
+              <button
+                onClick={(e) => handleDeleteGame(e, game.id, game.name)}
+                className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-red-500 hover:bg-red-600 text-white p-1.5 rounded-lg shadow-lg z-10"
+                title={`Delete ${game.name}`}
+              >
+                <X size={14} />
+              </button>
+              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start space-y-2 sm:space-y-0 mb-4">
+                <h3 className="font-bold text-base md:text-lg text-gray-800 group-hover:text-blue-700 transition-colors line-clamp-2">
                   {game.name}
                 </h3>
-                <div className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full flex items-center space-x-1 whitespace-nowrap ml-2">
+                <div className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full flex items-center space-x-1 whitespace-nowrap self-start sm:ml-2">
                   <Calendar size={12} />
                   <span>{dateFormatted}</span>
                 </div>
@@ -88,15 +104,15 @@ const GameList: React.FC = () => {
                   </div>
                 )}
                 
-                <div className="grid grid-cols-3 gap-2 text-xs text-gray-600">
-                  <div className="flex items-center space-x-1 bg-gray-50 p-2 rounded-lg">
-                    <Users size={12} className="text-gray-500" />
-                    <span className="font-medium">{game.players.length} players</span>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-2 text-xs text-gray-600">
+                  <div className="flex items-center space-x-2 bg-gray-50 p-2 rounded-lg min-w-0">
+                    <Users size={12} className="text-gray-500 flex-shrink-0" />
+                    <span className="font-medium whitespace-nowrap">{game.players.length} players</span>
                   </div>
                   <div className="flex items-center justify-center bg-gray-50 p-2 rounded-lg">
                     <span className="font-medium">{game.rounds.length} rounds</span>
                   </div>
-                  <div className="flex items-center justify-center bg-gray-50 p-2 rounded-lg">
+                  <div className="flex items-center justify-center bg-gray-50 p-2 rounded-lg col-span-2 md:col-span-1">
                     <span className="font-medium">{game.targetScore} pts</span>
                   </div>
                 </div>
